@@ -1,18 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Characters } from "../api/Characters";
+import { DetailView } from "./DetailView";
+import { getCharsUtil, CharactersData } from "../api/getCharsUtil";
+
+// interface CharactersData {
+//   id: number;
+//   name: string;
+//   description: string;
+//   thumbnail: {
+//     extension: string;
+//     path: string;
+//   };
+// }
 
 export const ListView = () => {
   const [name, setName] = useState("");
   const [selection, setSort] = useState("name");
+  const [data, setData] = useState<CharactersData[]>();
+
   useEffect(() => {
-    console.log(name);
+    const getData = async () => {
+      const res = await getCharsUtil(name, selection);
+      res && setData(res); // will only set if not null
+    };
+    getData();
   }, [name, selection]);
 
   return (
     <div>
       <div>
         <label
-          htmlFor="price"
+          htmlFor="search"
           className="block text-sm font-medium text-gray-700"
         >
           Character Search
@@ -20,8 +37,8 @@ export const ListView = () => {
         <div className="mt-1 relative rounded-md shadow-sm">
           <input
             type="text"
-            name="price"
-            id="price"
+            name="search"
+            id="search"
             className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-2 pr-12 sm:text-sm border-gray-300 rounded-md"
             onChange={(e) => setName(e.target.value)}
           />
@@ -43,7 +60,7 @@ export const ListView = () => {
           </div>
         </div>
       </div>
-      <Characters nameStartsWith={name} orderBy={selection} />
+      {data && <DetailView data={data} viewType="list" />}
     </div>
   );
 };
