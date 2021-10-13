@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { baseURL, publicKeyParam } from "./constants";
 
+interface SortProps {
+  orderBy: string;
+}
+
+interface QueryStr {
+  nameStartsWith: string;
+}
+
 interface CharactersData {
   id: number;
   name: string;
@@ -22,10 +30,12 @@ interface CharactersRes {
   };
 }
 
-const GetCharacters = async () => {
+const GetCharacters = async (input: string, selection: string) => {
   try {
     const res = await axios.get<CharactersRes>(
-      baseURL + "/v1/public/characters" + publicKeyParam
+      `${baseURL}/v1/public/characters?${
+        input && `nameStartsWith=${input}&`
+      }orderBy=${selection}&${publicKeyParam}`
     );
     return res.data.data.results;
   } catch (err) {
@@ -33,18 +43,21 @@ const GetCharacters = async () => {
   }
 };
 
-export const Characters = () => {
+export const Characters: React.FC<QueryStr & SortProps> = ({
+  nameStartsWith,
+  orderBy,
+}) => {
   const [data, setData] = useState<CharactersData[]>();
   useEffect(() => {
     const getData = async () => {
-      const res = await GetCharacters();
+      const res = await GetCharacters(nameStartsWith, orderBy);
       res && setData(res);
     };
     getData();
-  }, []);
+  }, [nameStartsWith, orderBy]);
 
   if (!data) {
-    return <div>sorry</div>;
+    return <div>Loading</div>;
   }
   return (
     <div>
@@ -61,3 +74,11 @@ export const Characters = () => {
     </div>
   );
 };
+
+/* get array of data based on some query result
+ *
+ *
+ *
+ *
+ *
+ */
