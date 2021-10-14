@@ -47,18 +47,14 @@ export const CharsDetailView: React.FC<data> = ({ data, viewType }) => {
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-white divide-y divide-gray-200">
           {data.map((char, idx) => {
             return (
               <tr
                 key={idx}
-                // className={viewType === "list" ? "pb-10" : ""}
+                className="hover:bg-gray-200"
                 onClick={() => openDetailView(idx, char.id)}
               >
-                {/* <div className="grid grid-cols-2 text-sm font-bold m-2 ">
-                <p>Name: {char.name!!}</p>
-                <p>Modified: {char.modified!!}</p>
-              </div> */}
                 <td>
                   <img
                     src={char.thumbnail.path + "." + char.thumbnail.extension}

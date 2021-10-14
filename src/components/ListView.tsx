@@ -84,7 +84,7 @@ export const ListView = () => {
           </div>
         </div>
       </form>
-      {data && <CharsDetailView data={data} viewType="list" />}
+      {data && name && <CharsDetailView data={data} viewType="list" />}
     </div>
   );
 };
