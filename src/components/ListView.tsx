@@ -59,7 +59,7 @@ export const ListView = () => {
               </div>
             </div>
           </div>
-          <div className="w-full md:w-1/3 mb-6 md:mb-0">
+          <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <div className="relative">
               <select
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"

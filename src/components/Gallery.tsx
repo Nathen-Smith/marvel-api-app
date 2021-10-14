@@ -41,6 +41,9 @@ export const Gallery = () => {
   return (
     <div>
       <div className="mt-2">
+        <div className="block text-gray-700 text-sm font-bold mb-2">
+          Find Comics by Character
+        </div>
         {options.map((option, idx) => {
           return (
             <div key={idx}>
