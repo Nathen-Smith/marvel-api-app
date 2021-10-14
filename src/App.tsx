@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Switch, Route, Link } from "react-router-dom";
+
+import { List } from "./components/List";
+import { Gallery } from "./components/Gallery";
+import { ComicsData } from "./api/apiUtils";
+
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
-import { ListView } from "./components/ListView";
-import { Gallery } from "./components/Gallery";
-import { ComicsData } from "./api/apiUtils";
-import { useCallback } from "react";
-
-function classNames(...classes: any[]) {
+export function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -109,7 +109,7 @@ export function App() {
 
       <Switch>
         <Route path="/cs498rk_mp2/search">
-          <ListView />
+          <List updateComicsData={updateComicsData} />
         </Route>
         <Route path="/cs498rk_mp2/gallery">
           <Gallery updateComicsData={updateComicsData} />
@@ -142,13 +142,19 @@ export function App() {
                     alt=""
                     key={comic.id}
                   />
-                  {comic.description}
-                  {charList()}
+                  <div>{comic.description}</div>
+                  <div>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900 my-2">
+                      Character List: {charList()}
+                    </h3>
+                  </div>
+
+                  <div className="block mt-4"></div>
                   <Link
                     to={`/cs498rk_mp2/detail/${
                       data[idx > 0 ? idx - 1 : idx]?.id
                     }`}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
                   >
                     Previous
                   </Link>
@@ -156,7 +162,7 @@ export function App() {
                     to={`/cs498rk_mp2/detail/${
                       data[idx < data.length - 1 ? idx + 1 : idx]?.id
                     }`}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
                   >
                     Next
                   </Link>
@@ -166,7 +172,7 @@ export function App() {
           })}
 
         <Route path="/cs498rk_mp2/">
-          <ListView />
+          <List updateComicsData={updateComicsData} />
         </Route>
       </Switch>
     </div>

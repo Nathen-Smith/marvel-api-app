@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getCharsByComicUtil, ComicsData } from "../api/apiUtils";
 import { Link } from "react-router-dom";
+import { classNames } from "../App";
 
 interface updateComicsData {
   updateComicsData: (arg: ComicsData[]) => void;
@@ -13,7 +14,13 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
     { name: "Captain America", id: "1009220", active: false },
     { name: "Iron Man", id: "1009368", active: false },
     { name: "Spider-Man (Peter Parker)", id: "1009610", active: false },
+    { name: "Scarlet Witch", id: "1009562", active: false },
     { name: "Hulk", id: "1009351", active: false },
+    { name: "Doctor Strange", id: "1009282", active: false },
+    { name: "Wolverine", id: "1009718", active: false },
+    { name: "Black Panther", id: "1009187", active: false },
+    { name: "Deadpool", id: "1009268", active: false },
+    { name: "Natasha Romanoff", id: "1009547", active: false },
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);
 
@@ -53,18 +60,25 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
         </div>
         {options.map((option, idx) => {
           return (
-            <div key={idx}>
-              <label className="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  className="form-checkbox"
-                  onChange={() => {
-                    updateFieldChanged(idx);
-                  }}
-                />
-                <span className="ml-2">{option.name}</span>
-              </label>
-            </div>
+            <label className="inline-flex items-center" key={idx}>
+              <button
+                onClick={() => {
+                  updateFieldChanged(idx);
+                }}
+                className={classNames(
+                  // "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold "
+                  // "hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                  option.active
+                    ? "bg-blue-500 hover:bg-blue-700 text-white"
+                    : "bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white border border-blue-500",
+                  " font-semibold py-2 px-4 rounded"
+                )}
+                aria-current={option.active ? "page" : undefined}
+                // className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              >
+                <span className="mx-2">{option.name}</span>
+              </button>
+            </label>
           );
         })}
       </div>

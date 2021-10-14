@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { CharsDetailView } from "./CharsDetailView";
-import { getCharsUtil, CharactersData } from "../api/apiUtils";
+import { Link } from "react-router-dom";
+import { searchComicsUtil, ComicsData } from "../api/apiUtils";
 
-export const ListView = () => {
-  const [name, setName] = useState("");
-  const [selection, setSort] = useState("name");
+interface updateComicsData {
+  updateComicsData: (arg: ComicsData[]) => void;
+}
+
+export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
+  const [input, setInput] = useState("");
+  const [selection, setSort] = useState("title");
   const [asc, setAsc] = useState(true);
-  const [data, setData] = useState<CharactersData[]>();
+  const [data, setData] = useState<ComicsData[]>();
 
   useEffect(() => {
     const getData = async () => {
-      const res = await getCharsUtil(name, selection, asc);
-      res && setData(res); // will only set if not null
+      const res = await searchComicsUtil(input, selection, asc);
+      if (res) {
+        setData(res);
+        updateComicsData(res);
+      }
     };
-    name && getData();
-  }, [name, selection, asc]);
+    input && getData();
+  }, [input, selection, asc, updateComicsData]);
 
   return (
     <div>
@@ -24,13 +31,13 @@ export const ListView = () => {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="username"
           >
-            Character Search
+            Comic Search
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="username"
             type="text"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
           />
         </div>
         <div className="flex items-center justify-between">
@@ -41,12 +48,12 @@ export const ListView = () => {
                 id="grid-state"
                 onChange={(e) =>
                   setSort(
-                    e.target.value === "Alphabetical" ? "name" : "modified"
+                    e.target.value === "Alphabetical" ? "title" : "onsaleDate"
                   )
                 }
               >
                 <option>Alphabetical</option>
-                <option>Date Modified</option>
+                <option>On Sale Date</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
@@ -84,7 +91,53 @@ export const ListView = () => {
           </div>
         </div>
       </form>
-      {data && name && <CharsDetailView data={data} viewType="list" />}
+      {data && input && (
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                On Sale Date
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {data.map((comic, idx) => {
+              return (
+                <tr key={idx} className="hover:bg-gray-200">
+                  <td>
+                    <Link key={comic.id} to={`/cs498rk_mp2/detail/${comic.id}`}>
+                      <img
+                        src={
+                          comic.thumbnail.path + "." + comic.thumbnail.extension
+                        }
+                        alt=""
+                        key={comic.id}
+                        className="h-48"
+                      />
+                    </Link>
+                  </td>
+                  <td>
+                    <div className="text-sm font-medium text-gray-900">
+                      {comic.title!!}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="text-sm font-medium text-gray-900">
+                      {comic.dates[0].date!!}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
