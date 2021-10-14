@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ComicsDetailView } from "./ComicsDetailView";
 import { getCharsByComicUtil, ComicsData } from "../api/apiUtils";
+import { Link } from "react-router-dom";
 
-export const Gallery = () => {
+interface updateComicsData {
+  updateComicsData: (arg: ComicsData[]) => void;
+}
+
+export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
   const [data, setData] = useState<ComicsData[]>();
   const [options, setOptions] = useState([
     { name: "Thor", id: "1009664", active: false },
@@ -27,16 +31,19 @@ export const Gallery = () => {
         activeSelections.push(options[len].id);
       }
     }
-    setActiveSelections(activeSelections);
+    options && setActiveSelections(activeSelections);
   }, [options]);
 
   useEffect(() => {
     const getData = async () => {
       const res = await getCharsByComicUtil(activeSelections);
-      res && setData(res); // will only set if not null
+      if (res) {
+        setData(res);
+        updateComicsData(res);
+      }
     };
-    getData();
-  }, [activeSelections]);
+    activeSelections && getData();
+  }, [activeSelections, updateComicsData]);
 
   return (
     <div>
@@ -62,7 +69,21 @@ export const Gallery = () => {
         })}
       </div>
 
-      {data && <ComicsDetailView data={data} viewType="gallery" />}
+      {data && (
+        <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
+          {data.map((comic, idx) => {
+            return (
+              <Link key={comic.id} to={`/cs498rk_mp2/detail/${comic.id}`}>
+                <img
+                  src={comic.thumbnail.path + "." + comic.thumbnail.extension}
+                  alt=""
+                  key={comic.id}
+                />
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

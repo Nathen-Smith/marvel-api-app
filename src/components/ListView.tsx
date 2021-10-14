@@ -13,7 +13,7 @@ export const ListView = () => {
       const res = await getCharsUtil(name, selection, asc);
       res && setData(res); // will only set if not null
     };
-    getData();
+    name && getData();
   }, [name, selection, asc]);
 
   return (

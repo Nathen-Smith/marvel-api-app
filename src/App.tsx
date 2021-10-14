@@ -5,6 +5,8 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 import { ListView } from "./components/ListView";
 import { Gallery } from "./components/Gallery";
+import { ComicsData } from "./api/apiUtils";
+import { useCallback } from "react";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -12,8 +14,8 @@ function classNames(...classes: any[]) {
 
 export function App() {
   const [navigation, setNavigation] = useState([
-    { name: "Search", to: "/search", current: false },
-    { name: "Gallery", to: "/gallery", current: false },
+    { name: "Search", to: "/cs498rk_mp2/search", current: false },
+    { name: "Gallery", to: "/cs498rk_mp2/gallery", current: false },
   ]);
 
   const updateFieldChanged = (index: number) => {
@@ -25,6 +27,13 @@ export function App() {
     newArr[index].current = true;
     setNavigation(newArr);
   };
+
+  const [data, setData] = useState<ComicsData[]>();
+
+  // using callback here to memoize and store the results of data
+  const updateComicsData = useCallback((data: ComicsData[]): void => {
+    setData(data);
+  }, []);
 
   return (
     <div>
@@ -99,13 +108,64 @@ export function App() {
       </Disclosure>
 
       <Switch>
-        <Route path="/search">
+        <Route path="/cs498rk_mp2/search">
           <ListView />
         </Route>
-        <Route path="/gallery">
-          <Gallery />
+        <Route path="/cs498rk_mp2/gallery">
+          <Gallery updateComicsData={updateComicsData} />
         </Route>
-        <Route path="/">
+        {data &&
+          data.map((comic, idx) => {
+            const charList = () => {
+              if (comic.characters?.returned) {
+                let charList = new Array<string>();
+                comic.characters.items.map(({ name }) => {
+                  if (name) {
+                    return charList.push(name);
+                  } else {
+                    return null;
+                  }
+                });
+                return charList.toString();
+              } else {
+                return null;
+              }
+            };
+            return (
+              <Route path={`/cs498rk_mp2/detail/${comic.id}`} key={comic.id}>
+                <div>
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    {comic.title}
+                  </h3>
+                  <img
+                    src={comic.thumbnail.path + "." + comic.thumbnail.extension}
+                    alt=""
+                    key={comic.id}
+                  />
+                  {comic.description}
+                  {charList()}
+                  <Link
+                    to={`/cs498rk_mp2/detail/${
+                      data[idx > 0 ? idx - 1 : idx]?.id
+                    }`}
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  >
+                    Previous
+                  </Link>
+                  <Link
+                    to={`/cs498rk_mp2/detail/${
+                      data[idx < data.length - 1 ? idx + 1 : idx]?.id
+                    }`}
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  >
+                    Next
+                  </Link>
+                </div>
+              </Route>
+            );
+          })}
+
+        <Route path="/cs498rk_mp2/">
           <ListView />
         </Route>
       </Switch>
