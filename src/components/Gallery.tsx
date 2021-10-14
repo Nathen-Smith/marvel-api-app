@@ -8,7 +8,7 @@ export const Gallery = () => {
     { name: "Thor", id: "1009664", active: false },
     { name: "Captain America", id: "1009220", active: false },
     { name: "Iron Man", id: "1009368", active: false },
-    { name: "Spider-Man (Miles Morales)", id: "1016181", active: false },
+    { name: "Spider-Man (Peter Parker)", id: "1009610", active: false },
     { name: "Hulk", id: "1009351", active: false },
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);

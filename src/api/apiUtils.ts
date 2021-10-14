@@ -42,7 +42,8 @@ export interface ComicsData {
     path: string;
   };
   characters: {
-    items: [name?: string, role?: string];
+    returned: number;
+    items: [{ name: string; role: string }];
   };
 }
 
@@ -65,7 +66,7 @@ export const getCharsUtil = async (
     const res = await axios.get<CharactersRes>(
       `${baseURL}/v1/public/characters?${
         input && `nameStartsWith=${input}&`
-      }orderBy=${!asc ? `-` : ``}${selection}&limit=5&${publicKeyParam}`
+      }orderBy=${!asc ? `-` : ``}${selection}&limit=10&${publicKeyParam}`
     );
     console.log(res.data);
     return res.data.data.results;

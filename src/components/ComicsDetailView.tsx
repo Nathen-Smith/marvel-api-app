@@ -31,15 +31,25 @@ export const ComicsDetailView: React.FC<data> = ({ data, viewType }) => {
     setOpen(true);
   };
 
+  const charList = (idx: number) => {
+    if (data[idx]?.characters?.returned) {
+      let charList = new Array<string>();
+      data[idx].characters.items.map(({ name }) => {
+        if (name) {
+          return charList.push(name);
+        } else {
+          return null;
+        }
+      });
+      return charList.toString();
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div>
-      <div
-        className={
-          viewType === "gallery"
-            ? "container grid grid-cols-3 gap-2 mx-auto"
-            : ""
-        }
-      >
+      <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
         {data.map((comic, idx) => {
           return (
             <div
@@ -110,6 +120,18 @@ export const ComicsDetailView: React.FC<data> = ({ data, viewType }) => {
                           {data[currViewingIdx].description
                             ? data[currViewingIdx].description
                             : ""}
+                        </p>
+                      </div>
+
+                      <Dialog.Title
+                        as="h3"
+                        className="text-md leading-6 font-medium text-gray-900"
+                      >
+                        Characters
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500">
+                          {charList(currViewingIdx)}
                         </p>
                       </div>
                     </div>
