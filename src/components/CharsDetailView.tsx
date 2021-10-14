@@ -33,29 +33,55 @@ export const CharsDetailView: React.FC<data> = ({ data, viewType }) => {
 
   return (
     <div>
-      <div
-        className={
-          viewType === "gallery"
-            ? "container grid grid-cols-3 gap-2 mx-auto"
-            : ""
-        }
-      >
-        {data.map((char, idx) => {
-          return (
-            <div
-              key={idx}
-              // className={viewType === "list" ? "pb-10" : ""}
-            >
-              <img
-                src={char.thumbnail.path + "." + char.thumbnail.extension}
-                alt=""
-                key={char.id}
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Modified
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((char, idx) => {
+            return (
+              <tr
+                key={idx}
+                // className={viewType === "list" ? "pb-10" : ""}
                 onClick={() => openDetailView(idx, char.id)}
-              />
-            </div>
-          );
-        })}
-      </div>
+              >
+                {/* <div className="grid grid-cols-2 text-sm font-bold m-2 ">
+                <p>Name: {char.name!!}</p>
+                <p>Modified: {char.modified!!}</p>
+              </div> */}
+                <td>
+                  <img
+                    src={char.thumbnail.path + "." + char.thumbnail.extension}
+                    alt=""
+                    key={char.id}
+                    className="h-48"
+                  />
+                </td>
+                <td>
+                  <div className="text-sm font-medium text-gray-900">
+                    {char.name!!}
+                  </div>
+                </td>
+                <td>
+                  <div className="text-sm font-medium text-gray-900">
+                    {char.modified!!}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog

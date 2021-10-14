@@ -19,6 +19,7 @@ export interface CharactersData {
       }
     ];
   };
+  modified: string;
 }
 
 interface CharactersRes {
@@ -55,12 +56,16 @@ interface ComicsRes {
   };
 }
 
-export const getCharsUtil = async (input: string, selection: string) => {
+export const getCharsUtil = async (
+  input: string,
+  selection: string,
+  asc: boolean
+) => {
   try {
     const res = await axios.get<CharactersRes>(
       `${baseURL}/v1/public/characters?${
         input && `nameStartsWith=${input}&`
-      }orderBy=${selection}&${publicKeyParam}`
+      }orderBy=${!asc ? `-` : ``}${selection}&limit=5&${publicKeyParam}`
     );
     console.log(res.data);
     return res.data.data.results;
@@ -71,33 +76,20 @@ export const getCharsUtil = async (input: string, selection: string) => {
 
 export const getCharsByComicUtil = async (selections: string[]) => {
   try {
+    let charParam = "characters";
     if (selections.length === 0) {
       return null;
+    } else if (selections.length > 1) {
+      charParam = "sharedAppearances";
     }
     console.log(selections.toString());
 
-    console.log(`${baseURL}/v1/public/comics?characters=
-    ${selections.toString()}&
-    
-    ${publicKeyParam}`);
-
     const res = await axios.get<ComicsRes>(
-      `${baseURL}/v1/public/comics?characters=${selections.toString()}&${publicKeyParam}`
+      `${baseURL}/v1/public/comics?${charParam}=${selections.toString()}&limit=15&${publicKeyParam}`
     );
     console.log(res.data);
     return res.data.data.results;
   } catch (err) {
     return null;
   }
-  // try {
-  //   const res = await axios.get<CharactersRes>(
-  //     `${baseURL}/v1/public/characters?${
-  //       input && `nameStartsWith=${input}&`
-  //     }orderBy=${selection}&${publicKeyParam}`
-  //   );
-  //   console.log(res.data);
-  //   return res.data.data.results;
-  // } catch (err) {
-  //   return null;
-  // }
 };
