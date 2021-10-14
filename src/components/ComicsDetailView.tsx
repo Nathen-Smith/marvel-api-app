@@ -1,10 +1,10 @@
 import React from "react";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CharactersData } from "../api/getCharsUtil";
+import { ComicsData } from "../api/apiUtils";
 
 interface data {
-  data: CharactersData[];
+  data: ComicsData[];
   viewType: string;
 }
 
@@ -20,12 +20,13 @@ interface data {
  *
  */
 
-export const DetailView: React.FC<data> = ({ data, viewType }) => {
+export const ComicsDetailView: React.FC<data> = ({ data, viewType }) => {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
   const [currViewingIdx, setCurrViewingIdx] = useState(0);
 
-  const openDetailView = (idx: number) => {
+  const openDetailView = (idx: number, charId: number) => {
+    console.log(charId);
     setCurrViewingIdx(idx);
     setOpen(true);
   };
@@ -38,19 +39,23 @@ export const DetailView: React.FC<data> = ({ data, viewType }) => {
             ? "container grid grid-cols-3 gap-2 mx-auto"
             : ""
         }
-      ></div>
-      {data.map((char, idx) => {
-        return (
-          <div key={char.id} className={viewType === "list" ? "pb-10" : ""}>
-            <img
-              src={char.thumbnail.path + "." + char.thumbnail.extension}
-              alt=""
-              key={char.id}
-              onClick={() => openDetailView(idx)}
-            />
-          </div>
-        );
-      })}
+      >
+        {data.map((comic, idx) => {
+          return (
+            <div
+              key={idx}
+              // className={viewType === "list" ? "pb-10" : ""}
+            >
+              <img
+                src={comic.thumbnail.path + "." + comic.thumbnail.extension}
+                alt=""
+                key={comic.id}
+                onClick={() => openDetailView(idx, comic.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
 
       <Transition.Root show={open} as={Fragment}>
         <Dialog
@@ -96,8 +101,8 @@ export const DetailView: React.FC<data> = ({ data, viewType }) => {
                         as="h3"
                         className="text-lg leading-6 font-medium text-gray-900"
                       >
-                        {data[currViewingIdx].name
-                          ? data[currViewingIdx].name
+                        {data[currViewingIdx].title
+                          ? data[currViewingIdx].title
                           : ""}
                       </Dialog.Title>
                       <div className="mt-2">
