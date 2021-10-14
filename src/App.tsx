@@ -6,7 +6,12 @@ import { Gallery } from "./components/Gallery";
 import { ComicsData } from "./api/apiUtils";
 
 import { Disclosure } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import {
+  MenuIcon,
+  XIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/outline";
 
 export function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -133,39 +138,43 @@ export function App() {
             };
             return (
               <Route path={`/cs498rk_mp2/detail/${comic.id}`} key={comic.id}>
-                <div>
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                <div className="content-center w-10/12 max-w-screen-lg mx-auto">
+                  <h3 className="text-lg text-center leading-6 font-medium text-gray-900">
                     {comic.title}
                   </h3>
-                  <img
-                    src={comic.thumbnail.path + "." + comic.thumbnail.extension}
-                    alt=""
-                    key={comic.id}
-                  />
-                  <div>{comic.description}</div>
+                  <div className="mx-auto flex content-start mt-4">
+                    <Link
+                      to={`/cs498rk_mp2/detail/${
+                        data[idx > 0 ? idx - 1 : idx]?.id
+                      }`}
+                      className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+                    >
+                      <ChevronLeftIcon className="block h-4 w-4" />
+                    </Link>
+                    <img
+                      src={
+                        comic.thumbnail.path + "." + comic.thumbnail.extension
+                      }
+                      alt=""
+                      key={comic.id}
+                      className="mx-auto h-1/2"
+                    />
+                    <Link
+                      to={`/cs498rk_mp2/detail/${
+                        data[idx < data.length - 1 ? idx + 1 : idx]?.id
+                      }`}
+                      className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+                    >
+                      <ChevronRightIcon className="block h-4 w-4" />
+                    </Link>
+                  </div>
+
+                  <div className="text-left text-md">{comic.description}</div>
                   <div>
                     <h3 className="text-lg leading-6 font-medium text-gray-900 my-2">
                       Character List: {charList()}
                     </h3>
                   </div>
-
-                  <div className="block mt-4"></div>
-                  <Link
-                    to={`/cs498rk_mp2/detail/${
-                      data[idx > 0 ? idx - 1 : idx]?.id
-                    }`}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-                  >
-                    Previous
-                  </Link>
-                  <Link
-                    to={`/cs498rk_mp2/detail/${
-                      data[idx < data.length - 1 ? idx + 1 : idx]?.id
-                    }`}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-                  >
-                    Next
-                  </Link>
                 </div>
               </Route>
             );

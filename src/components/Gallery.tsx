@@ -13,6 +13,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
     { name: "Thor", id: "1009664", active: false },
     { name: "Captain America", id: "1009220", active: false },
     { name: "Iron Man", id: "1009368", active: false },
+    { name: "Avengers", id: "1009165", active: false },
     { name: "Spider-Man (Peter Parker)", id: "1009610", active: false },
     { name: "Scarlet Witch", id: "1009562", active: false },
     { name: "Hulk", id: "1009351", active: false },
@@ -21,6 +22,8 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
     { name: "Black Panther", id: "1009187", active: false },
     { name: "Deadpool", id: "1009268", active: false },
     { name: "Natasha Romanoff", id: "1009547", active: false },
+    { name: "Thanos", id: "1009652", active: false },
+    { name: "Guardians of the Galaxy", id: "1011299", active: false },
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);
 
@@ -54,13 +57,13 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
 
   return (
     <div>
-      <div className="mt-2">
+      <div className="max-w-7xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="block text-gray-700 text-sm font-bold mb-2">
           Find Comics by Character
         </div>
         {options.map((option, idx) => {
           return (
-            <label className="inline-flex items-center" key={idx}>
+            <label className="flex inline-flex items-center p-1" key={idx}>
               <button
                 onClick={() => {
                   updateFieldChanged(idx);
@@ -81,6 +84,9 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
             </label>
           );
         })}
+        <div className="block text-gray-400 text-sm mt-2">
+          Hint: Selecting multiple characters retrieves shared appearances
+        </div>
       </div>
 
       {data && (

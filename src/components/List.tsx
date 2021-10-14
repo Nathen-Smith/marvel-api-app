@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { searchComicsUtil, ComicsData } from "../api/apiUtils";
 
 interface updateComicsData {
@@ -11,6 +11,7 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
   const [selection, setSort] = useState("title");
   const [asc, setAsc] = useState(true);
   const [data, setData] = useState<ComicsData[]>();
+  let location = useHistory();
 
   useEffect(() => {
     const getData = async () => {
@@ -23,9 +24,13 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
     input && getData();
   }, [input, selection, asc, updateComicsData]);
 
+  const openDetailView = (id: number) => {
+    location.push(`detail/${id}`);
+  };
+
   return (
     <div>
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form className="max-w-7xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -44,7 +49,7 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
           <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <div className="relative">
               <select
-                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-l leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-state"
                 onChange={(e) =>
                   setSort(
@@ -69,7 +74,7 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
           <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <div className="relative">
               <select
-                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-r leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-state"
                 onChange={(e) =>
                   setAsc(e.target.value === "Ascending" ? true : false)
@@ -109,18 +114,20 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((comic, idx) => {
               return (
-                <tr key={idx} className="hover:bg-gray-200">
+                <tr
+                  key={idx}
+                  className="cursor-pointer hover:bg-gray-200"
+                  onClick={() => openDetailView(comic.id)}
+                >
                   <td>
-                    <Link key={comic.id} to={`/cs498rk_mp2/detail/${comic.id}`}>
-                      <img
-                        src={
-                          comic.thumbnail.path + "." + comic.thumbnail.extension
-                        }
-                        alt=""
-                        key={comic.id}
-                        className="h-48"
-                      />
-                    </Link>
+                    <img
+                      src={
+                        comic.thumbnail.path + "." + comic.thumbnail.extension
+                      }
+                      alt=""
+                      key={comic.id}
+                      className="h-48"
+                    />
                   </td>
                   <td>
                     <div className="text-sm font-medium text-gray-900">
