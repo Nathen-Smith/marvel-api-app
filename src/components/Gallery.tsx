@@ -93,7 +93,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
         <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
           {data.map((comic, idx) => {
             return (
-              <Link key={comic.id} to={`/cs498rk_mp2/detail/${comic.id}`}>
+              <Link key={comic.id} to={`/marvel-api-app/detail/${comic.id}`}>
                 <img
                   src={comic.thumbnail.path + "." + comic.thumbnail.extension}
                   alt=""

@@ -19,8 +19,8 @@ export function classNames(...classes: any[]) {
 
 export function App() {
   const [navigation, setNavigation] = useState([
-    { name: "Search", to: "/cs498rk_mp2/search", current: false },
-    { name: "Gallery", to: "/cs498rk_mp2/gallery", current: false },
+    { name: "Search", to: "/marvel-api-app/search", current: false },
+    { name: "Gallery", to: "/marvel-api-app/gallery", current: false },
   ]);
 
   const updateFieldChanged = (index: number) => {
@@ -113,10 +113,10 @@ export function App() {
       </Disclosure>
 
       <Switch>
-        <Route path="/cs498rk_mp2/search">
+        <Route path="/marvel-api-app/search">
           <List updateComicsData={updateComicsData} />
         </Route>
-        <Route path="/cs498rk_mp2/gallery">
+        <Route path="/marvel-api-app/gallery">
           <Gallery updateComicsData={updateComicsData} />
         </Route>
         {data &&
@@ -137,14 +137,14 @@ export function App() {
               }
             };
             return (
-              <Route path={`/cs498rk_mp2/detail/${comic.id}`} key={comic.id}>
+              <Route path={`/marvel-api-app/detail/${comic.id}`} key={comic.id}>
                 <div className="content-center w-10/12 max-w-screen-lg mx-auto">
                   <h3 className="text-lg text-center leading-6 font-medium text-gray-900">
                     {comic.title}
                   </h3>
                   <div className="mx-auto flex content-start mt-4">
                     <Link
-                      to={`/cs498rk_mp2/detail/${
+                      to={`/marvel-api-app/detail/${
                         data[idx > 0 ? idx - 1 : idx]?.id
                       }`}
                       className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
@@ -160,7 +160,7 @@ export function App() {
                       className="mx-auto h-1/2"
                     />
                     <Link
-                      to={`/cs498rk_mp2/detail/${
+                      to={`/marvel-api-app/detail/${
                         data[idx < data.length - 1 ? idx + 1 : idx]?.id
                       }`}
                       className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
@@ -180,7 +180,7 @@ export function App() {
             );
           })}
 
-        <Route path="/cs498rk_mp2/">
+        <Route path="/marvel-api-app/">
           <List updateComicsData={updateComicsData} />
         </Route>
       </Switch>
