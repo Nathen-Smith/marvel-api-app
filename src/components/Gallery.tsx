@@ -26,6 +26,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
     { name: "Guardians of the Galaxy", id: "1011299", active: false },
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const updateFieldChanged = (index: number) => {
     let newArr = [...options]; // copying the old datas array
@@ -50,9 +51,13 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
       if (res) {
         setData(res);
         updateComicsData(res);
+        setLoading(false);
       }
     };
-    activeSelections && getData();
+    if (activeSelections && activeSelections.length !== 0) {
+      setLoading(true);
+      getData();
+    }
   }, [activeSelections, updateComicsData]);
 
   return (
@@ -88,6 +93,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
           Hint: Selecting multiple characters retrieves shared appearances
         </div>
       </div>
+      {loading && <div>loading</div>}
 
       {data && (
         <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
