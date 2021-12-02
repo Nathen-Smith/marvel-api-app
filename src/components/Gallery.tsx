@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCharsByComicUtil, ComicsData } from "../api/apiUtils";
 import { Link } from "react-router-dom";
 import { classNames } from "../App";
+import { CircularProgress } from "@mui/material";
 
 interface updateComicsData {
   updateComicsData: (arg: ComicsData[]) => void;
@@ -26,6 +27,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
     { name: "Guardians of the Galaxy", id: "1011299", active: false },
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const updateFieldChanged = (index: number) => {
     let newArr = [...options]; // copying the old datas array
@@ -50,9 +52,13 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
       if (res) {
         setData(res);
         updateComicsData(res);
+        setLoading(false);
       }
     };
-    activeSelections && getData();
+    if (activeSelections && activeSelections.length !== 0) {
+      setLoading(true);
+      getData();
+    }
   }, [activeSelections, updateComicsData]);
 
   return (
@@ -88,9 +94,14 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
           Hint: Selecting multiple characters retrieves shared appearances
         </div>
       </div>
+      {loading && (
+        <div style={{ color: "#3B82F6", textAlign: "center" }}>
+          <CircularProgress className="mx-auto" color="inherit" />
+        </div>
+      )}
 
       {data && (
-        <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
+        <div className={"container grid grid-cols-3 gap-2 mx-auto max-w-7xl"}>
           {data.map((comic, idx) => {
             return (
               <Link key={comic.id} to={`/marvel-api-app/detail/${comic.id}`}>
