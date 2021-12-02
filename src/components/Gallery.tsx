@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCharsByComicUtil, ComicsData } from "../api/apiUtils";
 import { Link } from "react-router-dom";
 import { classNames } from "../App";
+import { CircularProgress } from "@mui/material";
 
 interface updateComicsData {
   updateComicsData: (arg: ComicsData[]) => void;
@@ -93,10 +94,14 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
           Hint: Selecting multiple characters retrieves shared appearances
         </div>
       </div>
-      {loading && <div>loading</div>}
+      {loading && (
+        <div style={{ color: "#3B82F6", textAlign: "center" }}>
+          <CircularProgress className="mx-auto" color="inherit" />
+        </div>
+      )}
 
       {data && (
-        <div className={"container grid grid-cols-3 gap-2 mx-auto"}>
+        <div className={"container grid grid-cols-3 gap-2 mx-auto max-w-7xl"}>
           {data.map((comic, idx) => {
             return (
               <Link key={comic.id} to={`/marvel-api-app/detail/${comic.id}`}>
