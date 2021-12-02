@@ -142,12 +142,12 @@ export function App() {
                   {comic.title}
                 </h3>
 
-                <div className="flex content-center mt-4 mx-auto max-w-full">
+                <div className="flex content-center mt-4 mx-auto max-w-7xl">
                   <Link
                     to={`/marvel-api-app/detail/${
                       data[idx > 0 ? idx - 1 : idx]?.id
                     }`}
-                    className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ml-auto"
+                    className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ml-auto"
                   >
                     <ChevronLeftIcon className="block h-4 w-4" />
                   </Link>
@@ -155,19 +155,19 @@ export function App() {
                     src={comic.thumbnail.path + "." + comic.thumbnail.extension}
                     alt=""
                     key={comic.id}
-                    className="h-1/2"
+                    className="h-1/2 min-w-0"
                   />
                   <Link
                     to={`/marvel-api-app/detail/${
                       data[idx < data.length - 1 ? idx + 1 : idx]?.id
                     }`}
-                    className="flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mr-auto"
+                    className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mr-auto"
                   >
                     <ChevronRightIcon className="block h-4 w-4" />
                   </Link>
                 </div>
 
-                <div className="text-left text-md  mx-auto">
+                <div className="text-left text-md max-w-7xl mx-auto">
                   {comic.description}
                 </div>
                 <div>
