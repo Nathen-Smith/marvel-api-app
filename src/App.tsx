@@ -142,7 +142,7 @@ export function App() {
                   {comic.title}
                 </h3>
 
-                <div className="flex content-center justify-center mt-4 mx-auto">
+                <div className="flex content-center mt-4 mx-auto max-w-full">
                   <Link
                     to={`/marvel-api-app/detail/${
                       data[idx > 0 ? idx - 1 : idx]?.id
@@ -167,7 +167,7 @@ export function App() {
                   </Link>
                 </div>
 
-                <div className="text-left text-md max-w-7xl mx-auto">
+                <div className="text-left text-md  mx-auto">
                   {comic.description}
                 </div>
                 <div>
