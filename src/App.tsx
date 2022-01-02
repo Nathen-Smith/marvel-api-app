@@ -170,10 +170,8 @@ export function App() {
                 <div className="text-left text-md max-w-7xl mx-auto">
                   {comic.description}
                 </div>
-                <div className="max-w-7xl">
-                  <h3 className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto">
-                    Character List: {charList()}
-                  </h3>
+                <div className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto">
+                  Character List: {charList()}
                 </div>
               </Route>
             );
