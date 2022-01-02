@@ -155,7 +155,7 @@ export function App() {
                     src={comic.thumbnail.path + "." + comic.thumbnail.extension}
                     alt=""
                     key={comic.id}
-                    className="h-1/2 min-w-0"
+                    className="min-w-0 h-96 hover:h-52"
                   />
                   <Link
                     to={`/marvel-api-app/detail/${
@@ -170,8 +170,8 @@ export function App() {
                 <div className="text-left text-md max-w-7xl mx-auto">
                   {comic.description}
                 </div>
-                <div>
-                  <h3 className="text-lg leading-6 font-medium text-gray-900 my-2 max-w-7xl mx-auto">
+                <div className="max-w-7xl">
+                  <h3 className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto">
                     Character List: {charList()}
                   </h3>
                 </div>
