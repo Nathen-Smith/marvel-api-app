@@ -6,6 +6,8 @@ import { Gallery } from "./components/Gallery";
 import { ComicsData } from "./api/apiUtils";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -60,11 +62,11 @@ export function App() {
                     {item.name}
                   </Link>
                 ))}
-                <a href="https://github.com/Nathen-Smith/marvel-api-app">
-                  github
-                </a>
               </div>
             </div>
+            <a href="https://github.com/Nathen-Smith/marvel-api-app">
+              <FontAwesomeIcon icon={faGithub} size="2x" />
+            </a>
           </div>
         </div>
       </nav>
