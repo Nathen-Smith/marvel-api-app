@@ -60,6 +60,9 @@ export function App() {
                     {item.name}
                   </Link>
                 ))}
+                <a href="https://github.com/Nathen-Smith/marvel-api-app">
+                  github
+                </a>
               </div>
             </div>
           </div>
