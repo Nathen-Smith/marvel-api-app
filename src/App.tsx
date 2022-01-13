@@ -5,13 +5,7 @@ import { List } from "./components/List";
 import { Gallery } from "./components/Gallery";
 import { ComicsData } from "./api/apiUtils";
 
-import { Disclosure } from "@headlessui/react";
-import {
-  MenuIcon,
-  XIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 
 export function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -42,58 +36,18 @@ export function App() {
 
   return (
     <div>
-      <Disclosure as="nav" className="bg-gray-100">
-        {({ open }) => (
-          <>
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-              <div className="relative flex items-center justify-between h-16">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
-                  <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      <XIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <MenuIcon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Disclosure.Button>
-                </div>
-                {/* <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start"> */}
-                {/* hi */}
-                <div className="hidden sm:block sm">
-                  <div className="flex space-x-4">
-                    {navigation.map((item, idx) => (
-                      <Link
-                        key={item.name}
-                        to={item.to}
-                        onClick={() => updateFieldChanged(idx)}
-                        // highlight
-                        // onClick={()=>}
-                        // href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-300 text-black"
-                            : "text-gray-400 hover:bg-gray-300 hover:text-black",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                {/* </div> */}
-              </div>
-            </div>
-            <Disclosure.Panel className="sm:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1">
+      <nav className="bg-gray-100">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div className="relative flex items-center justify-between h-16">
+            <div className="">
+              <div className="flex space-x-4">
                 {navigation.map((item, idx) => (
                   <Link
                     key={item.name}
                     to={item.to}
-                    // highlight
                     onClick={() => updateFieldChanged(idx)}
+                    // highlight
+                    // onClick={()=>}
                     // href={item.href}
                     className={classNames(
                       item.current
@@ -107,10 +61,10 @@ export function App() {
                   </Link>
                 ))}
               </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+            </div>
+          </div>
+        </div>
+      </nav>
 
       <Switch>
         <Route path="/marvel-api-app/search">

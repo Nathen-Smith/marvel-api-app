@@ -28,6 +28,7 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
   ]);
   const [activeSelections, setActiveSelections] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   const updateFieldChanged = (index: number) => {
     let newArr = [...options]; // copying the old datas array
@@ -49,11 +50,20 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
   useEffect(() => {
     const getData = async () => {
       const res = await getCharsByComicUtil(activeSelections);
-      if (res) {
+      console.log(res);
+      if (!res) {
+        setError("Internal server error. Try again");
+        setData(undefined);
+      } else {
         setData(res);
         updateComicsData(res);
-        setLoading(false);
+        if (res.length === 0) {
+          setError("No data returned");
+        } else {
+          setError("");
+        }
       }
+      setLoading(false);
     };
     if (activeSelections && activeSelections.length !== 0) {
       setLoading(true);
@@ -94,15 +104,15 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
           Hint: Selecting multiple characters retrieves shared appearances
         </div>
       </div>
+      <div className="text-red-500 text-center font-semibold">{error}</div>
       {loading && (
         <div style={{ color: "#3B82F6", textAlign: "center" }}>
           <CircularProgress className="mx-auto" color="inherit" />
         </div>
       )}
-
       {data && (
         <div className={"container grid grid-cols-3 gap-2 mx-auto max-w-7xl"}>
-          {data.map((comic, idx) => {
+          {data.map((comic) => {
             return (
               <Link key={comic.id} to={`/marvel-api-app/detail/${comic.id}`}>
                 <img
