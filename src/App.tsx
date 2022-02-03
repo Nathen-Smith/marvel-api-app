@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import { List } from "./components/List";
 import { Gallery } from "./components/Gallery";
@@ -36,6 +36,23 @@ export function App() {
     setData(data);
   }, []);
 
+  const navigate = useNavigate();
+
+  const alertUser = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      navigate("/marvel-api-app/search");
+      window.location.href = "/marvel-api-app/search";
+    },
+    [navigate]
+  );
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, [alertUser]);
+
   return (
     <div>
       <nav className="bg-gray-100">
@@ -48,11 +65,8 @@ export function App() {
                     key={item.name}
                     to={item.to}
                     onClick={() => updateFieldChanged(idx)}
-                    // highlight
-                    // onClick={()=>}
-                    // href={item.href}
                     className={classNames(
-                      item.current
+                      item.current || window.location.pathname === item.to
                         ? "bg-gray-300 text-black"
                         : "text-gray-400 hover:bg-gray-300 hover:text-black",
                       "px-3 py-2 rounded-md text-sm font-medium"
@@ -71,13 +85,19 @@ export function App() {
         </div>
       </nav>
 
-      <Switch>
-        <Route path="/marvel-api-app/search">
-          <List updateComicsData={updateComicsData} />
-        </Route>
-        <Route path="/marvel-api-app/gallery">
-          <Gallery updateComicsData={updateComicsData} />
-        </Route>
+      <Routes>
+        <Route
+          path="*"
+          element={<List updateComicsData={updateComicsData} />}
+        />
+        <Route
+          path="/marvel-api-app/search"
+          element={<List updateComicsData={updateComicsData} />}
+        />
+        <Route
+          path="/marvel-api-app/gallery"
+          element={<Gallery updateComicsData={updateComicsData} />}
+        />
         {data &&
           data.map((comic, idx) => {
             const charList = () => {
@@ -96,50 +116,54 @@ export function App() {
               }
             };
             return (
-              <Route path={`/marvel-api-app/detail/${comic.id}`} key={comic.id}>
-                <h3 className="text-lg text-center leading-6 font-medium text-gray-900">
-                  {comic.title}
-                </h3>
+              <Route
+                path={`/marvel-api-app/detail/${comic.id}`}
+                key={comic.id}
+                element={
+                  <div>
+                    <h3 className="text-lg text-center leading-6 font-medium text-gray-900">
+                      {comic.title}
+                    </h3>
 
-                <div className="flex content-center mt-4 mx-auto max-w-7xl">
-                  <Link
-                    to={`/marvel-api-app/detail/${
-                      data[idx > 0 ? idx - 1 : idx]?.id
-                    }`}
-                    className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ml-auto"
-                  >
-                    <ChevronLeftIcon className="block h-4 w-4" />
-                  </Link>
-                  <img
-                    src={comic.thumbnail.path + "." + comic.thumbnail.extension}
-                    alt=""
-                    key={comic.id}
-                    className="min-w-0 h-96 hover:h-52"
-                  />
-                  <Link
-                    to={`/marvel-api-app/detail/${
-                      data[idx < data.length - 1 ? idx + 1 : idx]?.id
-                    }`}
-                    className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mr-auto"
-                  >
-                    <ChevronRightIcon className="block h-4 w-4" />
-                  </Link>
-                </div>
+                    <div className="flex content-center mt-4 mx-auto max-w-7xl">
+                      <Link
+                        to={`/marvel-api-app/detail/${
+                          data[idx > 0 ? idx - 1 : idx]?.id
+                        }`}
+                        className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ml-auto"
+                      >
+                        <ChevronLeftIcon className="block h-4 w-4" />
+                      </Link>
+                      <img
+                        src={
+                          comic.thumbnail.path + "." + comic.thumbnail.extension
+                        }
+                        alt=""
+                        key={comic.id}
+                        className="min-w-0 h-96 hover:h-52"
+                      />
+                      <Link
+                        to={`/marvel-api-app/detail/${
+                          data[idx < data.length - 1 ? idx + 1 : idx]?.id
+                        }`}
+                        className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mr-auto"
+                      >
+                        <ChevronRightIcon className="block h-4 w-4" />
+                      </Link>
+                    </div>
 
-                <div className="text-left text-md max-w-7xl mx-auto">
-                  {comic.description}
-                </div>
-                <div className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto">
-                  Character List: {charList()}
-                </div>
-              </Route>
+                    <div className="text-left text-md max-w-7xl mx-auto">
+                      {comic.description}
+                    </div>
+                    <div className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+                      Character List: {charList()}
+                    </div>
+                  </div>
+                }
+              />
             );
           })}
-
-        <Route path="/marvel-api-app/">
-          <List updateComicsData={updateComicsData} />
-        </Route>
-      </Switch>
+      </Routes>
     </div>
   );
 }

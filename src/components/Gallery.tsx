@@ -114,7 +114,11 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
         <div className={"container grid grid-cols-3 gap-2 mx-auto max-w-7xl"}>
           {data.map((comic) => {
             return (
-              <Link key={comic.id} to={`/marvel-api-app/detail/${comic.id}`}>
+              <Link
+                key={comic.id}
+                to={`/marvel-api-app/detail/${comic.id}`}
+                className="sm:hover:shadow-2xl ease-in-out"
+              >
                 <img
                   src={comic.thumbnail.path + "." + comic.thumbnail.extension}
                   alt=""

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { searchComicsUtil, ComicsData } from "../api/apiUtils";
 
 interface updateComicsData {
@@ -11,7 +11,7 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
   const [selection, setSort] = useState("title");
   const [asc, setAsc] = useState(true);
   const [data, setData] = useState<ComicsData[]>();
-  let location = useHistory();
+  let navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
@@ -25,7 +25,7 @@ export const List: React.FC<updateComicsData> = ({ updateComicsData }) => {
   }, [input, selection, asc, updateComicsData]);
 
   const openDetailView = (id: number) => {
-    location.push(`detail/${id}`);
+    navigate(`/marvel-api-app/detail/${id}`);
   };
 
   return (
