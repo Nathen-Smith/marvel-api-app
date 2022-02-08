@@ -36,12 +36,10 @@ export const getCharsByComicUtil = async (selections: string[]) => {
     } else if (selections.length > 1) {
       charParam = "sharedAppearances";
     }
-    // console.log(selections.toString());
 
     const res = await axios.get<ComicsRes>(
-      `${baseURL}/v1/public/comics?${charParam}=${selections.toString()}&limit=15&${publicKeyParam}`
+      `${baseURL}/v1/public/comics?${charParam}=${selections.toString()}&limit=9&${publicKeyParam}`
     );
-    // console.log(res.data);
     return res.data.data.results;
   } catch (err) {
     console.log(err);
