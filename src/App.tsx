@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import { List } from "./components/List";
 import { Gallery } from "./components/Gallery";
@@ -35,6 +35,23 @@ export function App() {
   const updateComicsData = useCallback((data: ComicsData[]): void => {
     setData(data);
   }, []);
+
+  const navigate = useNavigate();
+
+  const alertUser = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      navigate("/marvel-api-app");
+      window.location.href = "/marvel-api-app";
+    },
+    [navigate]
+  );
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, [alertUser]);
 
   return (
     <div>
