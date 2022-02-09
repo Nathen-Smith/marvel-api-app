@@ -42,7 +42,7 @@ export function App() {
     (e: any) => {
       e.preventDefault();
       navigate("/marvel-api-app");
-      window.location.href = "/marvel-api-app";
+      // window.location.href = "/marvel-api-app";
     },
     [navigate]
   );
