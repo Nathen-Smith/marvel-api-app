@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getCharsByComicUtil, ComicsData } from "../api/apiUtils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { classNames } from "../App";
 import { CircularProgress } from "@mui/material";
 
@@ -70,6 +70,23 @@ export const Gallery: React.FC<updateComicsData> = ({ updateComicsData }) => {
       getData();
     }
   }, [activeSelections, updateComicsData]);
+
+  const navigate = useNavigate();
+
+  const alertUser = useCallback(
+    (e: any) => {
+      e.preventDefault();
+      window.location.href = "/marvel-api-app";
+      navigate("/marvel-api-app");
+    },
+    [navigate]
+  );
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, [alertUser]);
 
   return (
     <div>
