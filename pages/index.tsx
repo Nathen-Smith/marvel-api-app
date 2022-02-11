@@ -76,40 +76,44 @@ const Gallery: NextPage = () => {
   return (
     <Navbar searchActive={false}>
       <div>
-        <div className="max-w-7xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="max-w-7xl mx-auto bg-white shadow-md rounded sm:pt-6 pb-4 sm:pb-8 sm:mb-4 px-2 sm:px-6 lg:px-8">
           <div className="block text-gray-700 text-sm font-bold mb-2">
             Find Comics by Character
           </div>
-          {options.map((option, idx) => {
-            return (
-              <label className="flex inline-flex items-center p-1" key={idx}>
-                <button
-                  onClick={() => {
-                    updateFieldChanged(idx);
-                  }}
-                  className={classNames(
-                    // "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold "
-                    // "hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                    option.active
-                      ? "bg-blue-500 hover:bg-blue-700 text-white"
-                      : "bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white border border-blue-500",
-                    " font-semibold py-2 px-4 rounded"
-                  )}
-                  aria-current={option.active ? "page" : undefined}
-                  // className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                >
-                  <span className="mx-2">{option.name}</span>
-                </button>
-              </label>
-            );
-          })}
+          <div className="-mx-1">
+            {options.map((option, idx) => {
+              return (
+                <label className="flex inline-flex items-center p-1" key={idx}>
+                  <button
+                    onClick={() => {
+                      updateFieldChanged(idx);
+                    }}
+                    className={classNames(
+                      // "bg-transparent hover:bg-blue-500 text-blue-700 font-semibold "
+                      // "hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                      option.active
+                        ? "bg-blue-500 hover:bg-blue-700 text-white"
+                        : "bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white border border-blue-500",
+                      " font-semibold py-2 px-4 rounded"
+                    )}
+                    aria-current={option.active ? "page" : undefined}
+                    // className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                  >
+                    <span className="">{option.name}</span>
+                  </button>
+                </label>
+              );
+            })}
+          </div>
           <div className="block text-gray-400 text-sm mt-2">
             Hint: Selecting multiple characters retrieves shared appearances
           </div>
         </div>
-        <div className="text-fuchsia-700 text-center font-semibold text-xl mt-12">
-          {error}
-        </div>
+        {error && (
+          <div className="text-fuchsia-700 text-center font-semibold text-xl sm:mt-12">
+            {error}
+          </div>
+        )}
         {loading && (
           <div style={{ color: "#3B82F6", textAlign: "center" }}>
             <CircularProgress className="mx-auto" color="inherit" />
