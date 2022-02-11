@@ -37,6 +37,7 @@ const Search: NextPage = () => {
       setData(newArr);
     }
   };
+  console.log(data);
 
   // const openDetailView = (id: number) => {
   //   navigate(`/marvel-api-app/detail/${id}`);

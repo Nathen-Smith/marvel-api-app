@@ -48,6 +48,16 @@ const ImgModal: React.FC<ChildrenProps> = ({
     }
   };
 
+  const textObjs = comicData?.textObjects &&
+    comicData.textObjects.length > 1 && (
+      <div className="">
+        {" "}
+        {comicData.textObjects.map((text) => {
+          <div key={text}>{text}</div>;
+        })}{" "}
+      </div>
+    );
+
   interface ComicImgProps {
     height: number;
     width: number;
@@ -122,6 +132,7 @@ const ImgModal: React.FC<ChildrenProps> = ({
                         Featuring: {charList()}
                       </div>
                     )}
+                    {textObjs}
                     <div className="text-left text-md max-w-7xl mx-auto">
                       {comicData.description}
                     </div>

@@ -15,6 +15,7 @@ export interface ComicsData {
   };
   modified: string;
   dates: [{ date: string; type: string }];
+  textObjects?: [text: string];
   images: [
     {
       extension: string;
