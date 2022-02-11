@@ -1,33 +1,21 @@
-import React, { useState, useCallback } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-
-import { List } from "./components/List";
-import { Gallery } from "./components/Gallery";
-import { ComicsData } from "./api/apiUtils";
-
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
-
-export function classNames(...classes: any[]) {
-  return classes.filter(Boolean).join(" ");
+import React, { useState, useCallback, Children, useEffect } from "react";
+import Link from "next/link";
+import { ComicsData } from "../utils/apiUtils";
+import { classNames } from "../utils/classNames";
+// import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faGithub } from "@fortawesome/free-brands-svg-icons";
+interface ChildrenProps {
+  children: JSX.Element;
+  searchActive: boolean;
 }
 
-export function App() {
+const Navbar: React.FC<ChildrenProps> = ({ children, searchActive }) => {
   const [navigation, setNavigation] = useState([
-    { name: "Search", to: "/marvel-api-app/search", current: false },
-    { name: "Gallery", to: "/marvel-api-app/gallery", current: false },
+    { name: "Gallery", to: "/", current: !searchActive },
+    { name: "Search", to: "/search", current: searchActive },
   ]);
-
-  const updateFieldChanged = (index: number) => {
-    let newArr = [...navigation]; // copying the old datas array
-    let len = newArr.length;
-    while (len--) {
-      newArr[len].current = false;
-    }
-    newArr[index].current = true;
-    setNavigation(newArr);
-  };
+  // there probably is a better way to handle this...
 
   const [data, setData] = useState<ComicsData[]>();
 
@@ -46,29 +34,34 @@ export function App() {
                 {navigation.map((item, idx) => (
                   <Link
                     key={item.name}
-                    to={item.to}
-                    onClick={() => updateFieldChanged(idx)}
-                    className={classNames(
-                      item.current || window.location.pathname === item.to
-                        ? "bg-gray-300 text-black"
-                        : "text-gray-400 hover:bg-gray-300 hover:text-black",
-                      "px-3 py-2 rounded-md text-sm font-medium"
-                    )}
+                    href={item.to}
+                    // onClick={() => updateFieldChanged(idx)}
+
                     aria-current={item.current ? "page" : undefined}
                   >
-                    {item.name}
+                    <a
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-300 text-black"
+                          : "text-gray-400 hover:bg-gray-300 hover:text-black",
+                        "px-3 py-2 rounded-md text-sm font-medium"
+                      )}
+                    >
+                      {item.name}
+                    </a>
                   </Link>
                 ))}
               </div>
             </div>
-            <a href="https://github.com/Nathen-Smith/marvel-api-app">
+            {/* <a href="https://github.com/Nathen-Smith/marvel-api-app">
               <FontAwesomeIcon icon={faGithub} size="2x" />
-            </a>
+            </a> */}
           </div>
         </div>
       </nav>
+      {children}
 
-      <Routes>
+      {/* <Routes>
         <Route
           path="*"
           element={<List updateComicsData={updateComicsData} />}
@@ -146,7 +139,9 @@ export function App() {
               />
             );
           })}
-      </Routes>
+      </Routes> */}
     </div>
   );
-}
+};
+
+export default Navbar;
