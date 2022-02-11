@@ -1,7 +1,7 @@
 {
   "name": "test",
   "private": true,
-  "homepage": "https://nathen-smith.github.io/nexttest",
+  "homepage": "https://nathen-smith.github.io/marvel-api-app",
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",

@@ -5,9 +5,9 @@ const nextConfig = {
 const isProd = process.env.NODE_ENV === "production";
 
 module.exports = {
-  assetPrefix: isProd ? "https://nathen-smith.github.io/nexttest" : "",
+  assetPrefix: isProd ? "https://nathen-smith.github.io/marvel-api-app" : "",
   nextConfig,
-  basePath: "/nexttest",
+  basePath: "/marvel-api-app",
   images: {
     loader: "akamai",
     path: "",
