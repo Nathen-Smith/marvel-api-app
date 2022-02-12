@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { ComicsData } from "../utils/apiUtils";
 import { classNames } from "../utils/classNames";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,14 +15,6 @@ const Navbar: React.FC<ChildrenProps> = ({ children, searchActive }) => {
     { name: "Search", to: "/search", current: searchActive },
   ]);
   // there probably is a better way to handle this...
-
-  const [data, setData] = useState<ComicsData[]>();
-
-  // using callback here to memoize and store the results of data
-  const updateComicsData = useCallback((data: ComicsData[]): void => {
-    setData(data);
-  }, []);
-
   return (
     <div>
       <nav className="bg-gray-100">
@@ -35,8 +26,6 @@ const Navbar: React.FC<ChildrenProps> = ({ children, searchActive }) => {
                   <Link
                     key={item.name}
                     href={item.to}
-                    // onClick={() => updateFieldChanged(idx)}
-
                     aria-current={item.current ? "page" : undefined}
                   >
                     <a
@@ -60,86 +49,6 @@ const Navbar: React.FC<ChildrenProps> = ({ children, searchActive }) => {
         </div>
       </nav>
       {children}
-
-      {/* <Routes>
-        <Route
-          path="*"
-          element={<List updateComicsData={updateComicsData} />}
-        />
-        <Route
-          path="/marvel-api-app/search"
-          element={<List updateComicsData={updateComicsData} />}
-        />
-        <Route
-          path="/marvel-api-app/gallery"
-          element={<Gallery updateComicsData={updateComicsData} />}
-        />
-        {data &&
-          data.map((comic, idx) => {
-            const charList = () => {
-              if (comic.characters?.returned) {
-                let charList = new Array<string>();
-                comic.characters.items.map(({ name }) => {
-                  if (name) {
-                    return charList.push(name);
-                  } else {
-                    return null;
-                  }
-                });
-                return charList.toString();
-              } else {
-                return null;
-              }
-            };
-            return (
-              <Route
-                path={`/marvel-api-app/detail/${comic.id}`}
-                key={comic.id}
-                element={
-                  <div>
-                    <h3 className="text-lg text-center leading-6 font-medium text-gray-900">
-                      {comic.title}
-                    </h3>
-
-                    <div className="flex content-center mt-4 mx-auto max-w-7xl">
-                      <Link
-                        to={`/marvel-api-app/detail/${
-                          data[idx > 0 ? idx - 1 : idx]?.id
-                        }`}
-                        className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ml-auto"
-                      >
-                        <ChevronLeftIcon className="block h-4 w-4" />
-                      </Link>
-                      <img
-                        src={
-                          comic.thumbnail.path + "." + comic.thumbnail.extension
-                        }
-                        alt=""
-                        key={comic.id}
-                        className="min-w-0 h-96 hover:h-52"
-                      />
-                      <Link
-                        to={`/marvel-api-app/detail/${
-                          data[idx < data.length - 1 ? idx + 1 : idx]?.id
-                        }`}
-                        className="min-w-0 flex items-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r mr-auto"
-                      >
-                        <ChevronRightIcon className="block h-4 w-4" />
-                      </Link>
-                    </div>
-
-                    <div className="text-left text-md max-w-7xl mx-auto">
-                      {comic.description}
-                    </div>
-                    <div className="text-lg font-medium text-gray-900 my-2 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-                      Character List: {charList()}
-                    </div>
-                  </div>
-                }
-              />
-            );
-          })}
-      </Routes> */}
     </div>
   );
 };

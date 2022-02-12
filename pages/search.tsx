@@ -41,10 +41,6 @@ const Search: NextPage = () => {
     },
     [data]
   );
-
-  // const openDetailView = (id: number) => {
-  //   navigate(`/marvel-api-app/detail/${id}`);
-  // };
   return (
     <Navbar searchActive={true}>
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
