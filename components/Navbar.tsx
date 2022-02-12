@@ -1,8 +1,8 @@
-import React, { useState, useCallback, Children, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { ComicsData } from "../utils/apiUtils";
 import { classNames } from "../utils/classNames";
-// import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 interface ChildrenProps {

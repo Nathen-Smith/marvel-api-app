@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 
 import React, { useEffect, useState, useCallback } from "react";
 import { getCharsByComicUtil, ComicsData } from "../utils/apiUtils";
 import { classNames } from "../utils/classNames";
 import Navbar from "../components/Navbar";
-import ImgModal from "../components/ImgModal";
+import GalleryImgModal from "../components/GalleryImgModal";
 import { CircularProgress } from "@mui/material";
 
 const Gallery: NextPage = () => {
@@ -125,10 +124,11 @@ const Gallery: NextPage = () => {
               "container grid grid-cols-3 gap-2 gap-y-1 mx-auto max-w-7xl"
             }
           >
-            {data.map((comic) => {
+            {data.map((comic, idx) => {
               return (
-                <ImgModal
+                <GalleryImgModal
                   key={comic.id}
+                  idx={idx}
                   comicData={comic}
                   h={640}
                   w={420}

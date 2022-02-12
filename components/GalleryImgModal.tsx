@@ -1,28 +1,38 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 
 import type { ComicsData } from "../utils/apiUtils";
 
-interface ChildrenProps {
+export interface ModalIdxProps {
+  idx: number;
+  open: boolean;
+}
+
+export interface ComicImgProps {
+  height: number;
+  width: number;
+  hover: boolean;
+}
+
+interface GalleryImgModalProps {
   comicData: ComicsData;
+  idx: number;
   h: number;
   w: number;
   hover: boolean;
   openFunc?: boolean;
+  closeFunc?: (arg: ModalIdxProps) => void;
 }
 
-const ImgModal: React.FC<ChildrenProps> = ({
+const GalleryImgModal: React.FC<GalleryImgModalProps> = ({
   comicData,
+  idx,
   h,
   w,
   hover,
-  openFunc,
 }) => {
   const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (typeof openFunc != "undefined") setOpen(openFunc);
-  }, [openFunc]);
 
   // const cancelButtonRef = useRef(null);
   const src =
@@ -58,12 +68,6 @@ const ImgModal: React.FC<ChildrenProps> = ({
       </div>
     );
 
-  interface ComicImgProps {
-    height: number;
-    width: number;
-    hover: boolean;
-  }
-
   const ComicImg: React.FC<ComicImgProps> = ({ height, width, hover }) => (
     <Image
       loader={() => src}
@@ -73,7 +77,7 @@ const ImgModal: React.FC<ChildrenProps> = ({
       width={width}
       unoptimized={true}
       onClick={() => {
-        if (typeof openFunc == "undefined") setOpen(!open);
+        setOpen(!open);
       }}
       className={`${
         hover && "sm:hover:shadow-2xl ease-in-out cursor-pointer"
@@ -119,7 +123,10 @@ const ImgModal: React.FC<ChildrenProps> = ({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div
+                onClick={() => setOpen(false)}
+                className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+              >
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="mx-auto justify-center flex flex-col text-center mt-3 sm:mt-0 sm:text-left">
                     {/* </div> */}
@@ -154,4 +161,4 @@ const ImgModal: React.FC<ChildrenProps> = ({
   );
 };
 
-export default ImgModal;
+export default GalleryImgModal;

@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { searchComicsUtil, ComicsData } from "../utils/apiUtils";
 
 import Navbar from "../components/Navbar";
-import ImgModal from "../components/ImgModal";
+import type { ComicImgProps } from "../components/GalleryImgModal";
+import { Dialog, Transition } from "@headlessui/react";
 
 const Search: NextPage = () => {
   const [input, setInput] = useState("");
@@ -27,17 +28,19 @@ const Search: NextPage = () => {
     input && getData();
   }, [input, selection, asc, updateComicsData]);
 
-  const updateFieldChanged = (index: number) => {
-    if (data) {
-      let newArr = [...data]; // copying the old datas array
-      newArr.forEach((_, idx) => {
-        newArr[idx].modalActive = false;
-      });
-      newArr[index].modalActive = true;
-      setData(newArr);
-    }
-  };
-  console.log(data);
+  const updateModalVisibility = useCallback(
+    (index: number, open: boolean) => {
+      if (data) {
+        let newArr = [...data]; // copying the old datas array
+        newArr.forEach((_, idx) => {
+          newArr[idx].modalActive = false;
+        });
+        newArr[index].modalActive = open;
+        setData(newArr);
+      }
+    },
+    [data]
+  );
 
   // const openDetailView = (id: number) => {
   //   navigate(`/marvel-api-app/detail/${id}`);
@@ -135,21 +138,138 @@ const Search: NextPage = () => {
                   comic.thumbnail.path.slice(4) +
                   "." +
                   comic.thumbnail.extension;
+
+                const modalCharList = () => {
+                  if (comic.characters?.returned) {
+                    let charList = new Array<string>();
+                    comic.characters.items.map(({ name }) => {
+                      if (name) {
+                        return charList.push(" " + name);
+                      } else {
+                        return null;
+                      }
+                    });
+                    return charList.toString();
+                  } else {
+                    return null;
+                  }
+                };
+
+                const textObjs = comic?.textObjects &&
+                  comic.textObjects.length > 1 && (
+                    <div className="">
+                      {" "}
+                      {comic.textObjects.map((text) => {
+                        <div key={text}>{text}</div>;
+                      })}{" "}
+                    </div>
+                  );
+
+                const ComicImg: React.FC<ComicImgProps> = ({
+                  height,
+                  width,
+                  hover,
+                }) => (
+                  <Image
+                    loader={() => src}
+                    src={src}
+                    alt=""
+                    height={height}
+                    width={width}
+                    unoptimized={true}
+                    onClick={() => {
+                      updateModalVisibility(idx, true);
+                    }}
+                    className={`${
+                      hover && "sm:hover:shadow-2xl ease-in-out cursor-pointer"
+                    }   mx-auto`}
+                  />
+                );
+
                 return (
                   <tr
                     key={idx}
                     className="cursor-pointer xl:hover:bg-gray-200"
-                    onClick={() => updateFieldChanged(idx)}
+                    onClick={() => updateModalVisibility(idx, true)}
                   >
                     <td>
-                      <ImgModal
-                        key={comic.id}
-                        comicData={comic}
-                        h={300}
-                        w={200}
-                        hover={false}
-                        openFunc={data[idx].modalActive}
-                      />
+                      <div>
+                        <Transition.Root
+                          show={comic?.modalActive || false}
+                          as={Fragment}
+                        >
+                          <Dialog
+                            as="div"
+                            className="fixed z-50 inset-0 overflow-y-auto"
+                            // initialFocus={cancelButtonRef}
+                            onClose={() => updateModalVisibility(idx, false)}
+                          >
+                            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                              <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity cursor-pointer" />
+                              </Transition.Child>
+
+                              {/* This element is to trick the browser into centering the modal contents. */}
+                              <span
+                                className="hidden sm:inline-block sm:align-middle sm:h-screen"
+                                aria-hidden="true"
+                              >
+                                &#8203;
+                              </span>
+                              <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                              >
+                                <div
+                                  onClick={() =>
+                                    updateModalVisibility(idx, false)
+                                  }
+                                  className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+                                >
+                                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <div className="mx-auto justify-center flex flex-col text-center mt-3 sm:mt-0 sm:text-left">
+                                      {/* </div> */}
+
+                                      <div className="text-lg text-center font-medium text-gray-900">
+                                        {comic.title}
+                                      </div>
+                                      <ComicImg
+                                        height={610}
+                                        width={400}
+                                        hover={false}
+                                      />
+                                      {modalCharList() && (
+                                        <div className="text-lg font-medium text-gray-900">
+                                          Featuring: {modalCharList()}
+                                        </div>
+                                      )}
+                                      {textObjs}
+                                      <div className="text-left text-md max-w-7xl mx-auto">
+                                        {comic.description}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Transition.Child>
+                            </div>
+                          </Dialog>
+                        </Transition.Root>
+
+                        <ComicImg height={300} width={200} hover={false} />
+                      </div>
                     </td>
                     <td>
                       <div className="text-sm font-medium text-gray-900">
