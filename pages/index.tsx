@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Head from "next/head";
 
 import React, { useEffect, useState, useCallback } from "react";
 import { getCharsByComicUtil, ComicsData } from "../utils/apiUtils";
@@ -74,7 +75,7 @@ const Gallery: NextPage = () => {
 
   return (
     <Navbar searchActive={false}>
-      <div>
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto bg-white shadow-md rounded sm:pt-6 pb-4 sm:pb-8 sm:mb-4 px-2 sm:px-6 lg:px-8">
           <div className="block text-gray-700 text-sm font-bold mb-2">
             Find Comics by Character
