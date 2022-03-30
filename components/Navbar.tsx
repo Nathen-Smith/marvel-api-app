@@ -42,9 +42,11 @@ const Navbar: React.FC<ChildrenProps> = ({ children, searchActive }) => {
                 ))}
               </div>
             </div>
-            <a href="https://github.com/Nathen-Smith/marvel-api-app">
+            {/* <a href="https://github.com/Nathen-Smith/marvel-api-app"> */}
+            <div>
               <FontAwesomeIcon icon={faGithub} size="2x" />
-            </a>
+            </div>
+            {/* </a> */}
           </div>
         </div>
       </nav>

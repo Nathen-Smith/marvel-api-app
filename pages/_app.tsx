@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/marvel-api-app/favicon.ico" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <title>Marvel API App</title>
       </Head>
